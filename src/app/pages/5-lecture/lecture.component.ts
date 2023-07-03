@@ -1,10 +1,14 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 export class Rectangle {
+  private p1: number[];
+  private p2: number[];
+  private p3: number[];
+  private p4: number[];
   private x: number;
   private y: number;
-  private width: number;
-  private height: number;
+  // private width: number;
+  // private height: number;
   private rDegree: number = 0; // rotation Degree
 
   private xc: number | null = null; //  마우스 클릭 위치(x)
@@ -13,18 +17,20 @@ export class Rectangle {
   constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    this.p1 = [x, y];
+    this.p2 = [x + width, y];
+    this.p3 = [x + width, y + height];
+    this.p4 = [x, y + height];
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const transX = this.width / 2 + this.x;
-    const transY = this.height / 2 + this.y;
+    // const transX = this.width / 2 + this.x;
+    // const transY = this.height / 2 + this.y;
 
     ctx.save();
-    ctx.translate(transX, transY);
-    ctx.rotate((this.rDegree * Math.PI) / 180);
-    ctx.translate(- transX, -transY);
+    // ctx.translate(transX, transY);
+    // ctx.rotate((this.rDegree * Math.PI) / 180);
+    // ctx.translate(- transX, -transY);
 
     ctx.beginPath();
     ctx.strokeStyle = 'grey';
@@ -33,10 +39,10 @@ export class Rectangle {
 
     
 
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x + this.width, this.y);
-    ctx.lineTo(this.x + this.width, this.y + this.height);
-    ctx.lineTo(this.x, this.y + this.height);
+    ctx.moveTo(this.p1[0], this.p1[1]);
+    ctx.lineTo(this.p2[0], this.p2[1]);
+    ctx.lineTo(this.p3[0], this.p3[1]);
+    ctx.lineTo(this.p4[0], this.p4[1]);
 
     ctx.closePath();
     ctx.fill(); // ctx.fillStyle = 'red';
@@ -55,7 +61,8 @@ export class Rectangle {
     // return distance;
     
     // 사각형일 경우
-    if (yc > this.y && yc < this.y + this.height && xc > this.x && xc < this.x + this.width) {
+    console.log(this.p1[1], this.p3[1]);
+    if (yc > this.p1[1] && yc < this.p3[1] && xc > this.p1[0]  && xc < this.p2[0]) {
       this.xc = xc;
       this.yc = yc;
       return true;
@@ -84,8 +91,17 @@ export class Rectangle {
       this.yc = y;
       
       // 시작점 변경 
-      this.x = this.x + dx;
-      this.y = this.y + dy;
+      // this.x = this.x + dx;
+      // this.y = this.y + dy;
+
+      this.p1[0] += dx;
+      this.p2[0] += dx;
+      this.p3[0] += dx;
+      this.p4[0] += dx;
+      this.p1[1] += dy;
+      this.p2[1] += dy;
+      this.p3[1] += dy;
+      this.p4[1] += dy;
 
 
       this.draw(ctx);
@@ -96,7 +112,27 @@ export class Rectangle {
   // object rotate
   //
   rotate(ctx: CanvasRenderingContext2D) {
-    this.rDegree = this.rDegree + 45;
+    console.log(this.p1, this.p2, this.p3, this.p4);
+    // const p1 = [...this.p1];
+    // this.p1 = [...this.p4];
+    // this.p2 = p1;
+    // this.p3 = [...this.p2];
+    // this.p4 = [...this.p3];
+
+    const p1 = JSON.parse(JSON.stringify(this.p1));
+    const p2 = JSON.parse(JSON.stringify(this.p2));
+    const p3 = JSON.parse(JSON.stringify(this.p3));
+    const p4 = JSON.parse(JSON.stringify(this.p4));
+    console.log('--------------');
+    console.log(p1, p2, p3, p4);
+    this.p1 = p4;
+    this.p2 = p1;
+    this.p3 = p2;
+    this.p4 = p3;
+
+
+    console.log(this.p1, this.p2, this.p3, this.p4);
+
     this.draw(ctx);
   }
 
@@ -110,7 +146,7 @@ export class Rectangle {
     (dblclick)='onMouseDblclick($event)'
     width='700px' height= '700px'></canvas>`
 })
-export class LectureComponent4 implements OnInit{
+export class LectureComponent5 implements OnInit{
   @ViewChild('canvasId', {static: true}) canvasRef: ElementRef<HTMLCanvasElement> = {} as ElementRef;
 
   private canvas: any;

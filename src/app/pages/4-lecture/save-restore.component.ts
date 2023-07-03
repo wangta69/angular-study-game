@@ -4,7 +4,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 @Component({
   selector: 'app-doc',
   template:`<canvas #canvasId 
-    width='700px' height= '700px'></canvas>`
+    width='800px' height= '700px'></canvas>`
 })
 export class LectureComponent4SaveRestore implements OnInit{
   @ViewChild('canvasId', {static: true}) canvasRef: ElementRef<HTMLCanvasElement> = {} as ElementRef;
@@ -30,34 +30,53 @@ export class LectureComponent4SaveRestore implements OnInit{
 
   draw = () => {
     
+    // save는 현재 까지의 작업내용을 history에서 저장하는 것이고
+    // restore을 저장된 내용을 하나씩 가져오고 history에서 삭제하는 것
 
-    const x = 100;
-    const y = 100;
-    const width = 100;
-    const height = 100;
-    // left rectangles, rotate from canvas origin
-    // this.ctx.save();
 
     // 사각형을 그립니다.
-    this.ctx.fillStyle = "#0095DD";
-    this.ctx.fillRect(x, y, width, height); 
+    this.ctx.fillStyle = 'red';
+    this.ctx.fillRect(50, 50, 100, 100); 
+
+    this.ctx.fillStyle = 'blue';
+    this.ctx.fillRect(200, 50, 100, 100);
+
+    // 가장 최근에 정의된 blue의 속성를 받아서 blue가 채워진다.
+    this.ctx.fillRect(350, 50, 100, 100);
 
 
-    // this.ctx.rotate(degree * Math.PI/180);
-    // canvas의 rotate는 canvas자체를 rotate 시키는 것이다.
-    // rotate를 할때 rotate의 object의 중심으로 해야 함으로  아래처럼 처리한다.
-    // rotate는 실제로 object를 하는 것이 아니라 canvas 의 0, 0 을 기준으로 rotate를 하고 그 상태에서 object를 그리기 때문이다.
-    const transX = width / 2 + x;
-    const transY = height / 2 + y;
-    this.ctx.save()
-    this.ctx.translate(transX, transY);
-    this.ctx.rotate(45 * Math.PI/180);
-    this.ctx.translate(- transX, -transY); // translate back
-    this.ctx.fillStyle = "#4D4E53";
-    this.ctx.fillRect(x, y, width, height); 
-    this.ctx.restore()
+
+    // 사각형을 그립니다.
+    this.ctx.fillStyle = 'red';
+    this.ctx.fillRect(50, 200, 100, 100); 
+    this.ctx.save(); // 지금까지의 작업을 저장
+
+    this.ctx.fillStyle = 'blue';
+    this.ctx.fillRect(200, 200, 100, 100);
+
+    this.ctx.restore(); // save 이전의 속성을 받아서 red가 채워진다.
+    this.ctx.fillRect(350, 200, 100, 100);
 
 
+
+    // 사각형을 그립니다.
+    this.ctx.fillStyle = 'red';
+    this.ctx.fillRect(50, 350, 100, 100); 
+    this.ctx.save(); // 지금까지의 작업을 저장
+
+    this.ctx.fillStyle = 'blue';
+    this.ctx.fillRect(200, 350, 100, 100);
+    this.ctx.save();
+
+    this.ctx.fillStyle = 'orange';
+    this.ctx.fillRect(350, 350, 100, 100);
+
+    
+    this.ctx.restore(); // 가장 최근에 저장된 blue를 채움
+    this.ctx.fillRect(500, 350, 100, 100);
+
+    this.ctx.restore(); // blue 이전에 저장된 red를 채움
+    this.ctx.fillRect(650, 350, 100, 100);
   } 
 
 

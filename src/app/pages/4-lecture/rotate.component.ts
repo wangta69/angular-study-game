@@ -49,15 +49,17 @@ export class LectureComponent4Rotate implements OnInit{
     // rotate는 실제로 object를 하는 것이 아니라 canvas 의 0, 0 을 기준으로 rotate를 하고 그 상태에서 object를 그리기 때문이다.
     const transX = width / 2 + x;
     const transY = height / 2 + y;
-    this.ctx.save()
+    this.ctx.save() // rotate 전에 save를 하고
     this.ctx.translate(transX, transY);
     this.ctx.rotate(45 * Math.PI/180);
     this.ctx.translate(- transX, -transY); // translate back
     this.ctx.fillStyle = "#4D4E53";
     this.ctx.fillRect(x, y, width, height); 
-    this.ctx.restore()
+    this.ctx.restore() // rotate된 상태를 원상태로 바꾼다.
+    // 만약 바꾸지 않으면 아래 도형은 로테이트된 상태에서 그려진다.
 
-
+    this.ctx.fillStyle = "#4D4E53";
+    this.ctx.fillRect(x +100, y+100, width, height); 
   } 
 
 
