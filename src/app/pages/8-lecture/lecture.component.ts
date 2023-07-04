@@ -146,68 +146,99 @@ export class Ellipse extends Objects {
   //https://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas
   private x: number;
   private y: number;
-  private r: number;
-  private sAngle: number;
-  private eAngle: number;
+  private w: number;
+  private h: number;
 
   private xc: number | null = null; //  마우스 클릭 위치(x)
   private yc: number | null = null; //  마우스 클릭 위치(y)
   
-  constructor(x: number, y: number, r: number,  sAngle?: number, eAngle?: number) {
+  constructor(x: number, y: number, w: number,  h: number) {
     super();
     this.x = x;
     this.y = y;
-    this.r = r;
-    this.sAngle = sAngle || 0;
-    this.eAngle = eAngle || 2;
+    this.w = w;
+    this.h = h;
   }
 
   draw(ctx: any) {
     ctx.save();
     
-    // ctx.beginPath();
-    // ctx.fillStyle = 'red';
-    // ctx.lineWidth = 4;
-    // ctx.arc(60, 60, 45, 0, 2 * Math.PI, true);
-    // ctx.stroke();
-    // ctx.fill();  
 
-    this.matrix[0] = 1.6;
-    
+    // const kappa = .5522848;
+    const kappa = .5522848;
+    const trans = [...this.transfromPoint(this.x, this.y)];
+
+    const ox = (this.w / 2) * kappa; // control point offset horizontal
+    const oy = (this.h / 2) * kappa; // control point offset vertical
+    const xe = trans[0] + this.w;           // x-end
+    const ye = trans[1] + this.h;           // y-end
+    const xm = trans[0] + this.w / 2;       // x-middle
+    const ym = trans[1] + this.h / 2;       // y-middle
+
+
     ctx.beginPath();
     ctx.strokeStyle = this.property.strokeStyle;
     ctx.lineWidth = this.property.lineWidth;
     ctx.fillStyle = this.property.fillStyle;
-    const trans = [...this.transfromPoint(this.x, this.y)];
 
-    // ctx.transform(1.6,0,0,1,0,0);
-
-    ctx.arc(trans[0], trans[1], this.r, this.sAngle * Math.PI,  this.eAngle * Math.PI, false);
-
+    ctx.moveTo(trans[0], ym);
+    ctx.bezierCurveTo(trans[0], ym - oy, xm - ox, trans[1], xm, trans[1]);
+    ctx.bezierCurveTo(xm + ox, trans[1], xe, ym - oy, xe, ym);
+    ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+    ctx.bezierCurveTo(xm - ox, ye, trans[0], ym + oy, trans[0], ym);
+    // ctx.closePath(); // not used correctly, see comments (use to close off open path)
     ctx.fill();
     ctx.stroke(); 
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
+
+
+    // ctx.beginPath();
+    // ctx.moveTo(this.x, ym);
+    // ctx.bezierCurveTo(this.x, ym - oy, xm - ox, this.y, xm, this.y);
+    // ctx.bezierCurveTo(xm + ox, this.y, xe, ym - oy, xe, ym);
+    // ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+    // ctx.bezierCurveTo(xm - ox, ye, this.x, ym + oy, this.x, ym);
+    // // ctx.closePath(); // not used correctly, see comments (use to close off open path)
+    // ctx.stroke();
+
+    // // ctx.beginPath();
+    // // ctx.fillStyle = 'red';
+    // // ctx.lineWidth = 4;
+    // // ctx.arc(60, 60, 45, 0, 2 * Math.PI, true);
+    // // ctx.stroke();
+    // // ctx.fill();  
+
+    // this.matrix[0] = 1.6;
+    
+    // ctx.beginPath();
+    // ctx.strokeStyle = this.property.strokeStyle;
+    // ctx.lineWidth = this.property.lineWidth;
+    // ctx.fillStyle = this.property.fillStyle;
+    // const trans = [...this.transfromPoint(this.x, this.y)];
+
+    // // ctx.transform(1.6,0,0,1,0,0);
+
+    // ctx.arc(trans[0], trans[1], this.r, this.sAngle * Math.PI,  this.eAngle * Math.PI, false);
+
+    // ctx.fill();
+    // ctx.stroke(); 
+    // ctx.closePath();
+    // ctx.stroke();
+    // ctx.restore();
   }
 
   // mousedown 
   selected(xc: number, yc: number) {
     
-    console.log('selected ', xc, yc);
     //  타원일 경우 이 부분과 radius를 활용하여 touch 되었는지 확인
     const m = this.matrix;
-    const distance = Math.sqrt(
-      (xc - (this.x + m[4])) * (xc - (this.x + m[4])) +
-        (yc - (this.y+ m[5])) * (yc - (this.y+ m[5])) 
-    );
-
-    if (distance < this.r) {
+    if (yc > this.y + m[5] && yc < this.y + m[5] + this.h && xc > this.x + m[4] && xc < this.x + m[4] + this.w) {
       this.xc = xc;
       this.yc = yc;
       return true;
     }
-
     return false;
   }
 
@@ -266,15 +297,6 @@ export class Circle extends Objects {
   draw(ctx: any) {
     ctx.save();
     
-    // ctx.beginPath();
-    // ctx.fillStyle = 'red';
-    // ctx.lineWidth = 4;
-    // ctx.arc(60, 60, 45, 0, 2 * Math.PI, true);
-    // ctx.stroke();
-    // ctx.fill();  
-
-    this.matrix[0] = 1.6;
-    
     ctx.beginPath();
     ctx.strokeStyle = this.property.strokeStyle;
     ctx.lineWidth = this.property.lineWidth;
@@ -295,7 +317,6 @@ export class Circle extends Objects {
   // mousedown 
   selected(xc: number, yc: number) {
     
-    console.log('selected ', xc, yc);
     //  타원일 경우 이 부분과 radius를 활용하여 touch 되었는지 확인
     const m = this.matrix;
     const distance = Math.sqrt(
@@ -478,6 +499,15 @@ export class LectureComponent8 implements OnInit{
     circle.setProperty({fillStyle: 'yellow'})
     circle.draw(this.ctx);
     this.objects.push(circle);
+
+    const ellipse = new Ellipse(0, 0, 150, 100);
+    ellipse.name = 'ellipse';
+    ellipse.setOrigin(500, 400);
+    ellipse.setProperty({fillStyle: 'green'})
+    ellipse.draw(this.ctx);
+    this.objects.push(ellipse);
+
+    
 
   }
 

@@ -12,6 +12,7 @@ import { LectureComponent6 } from './pages/6-lecture/lecture.component';
 import { LectureComponent6MatrixDefault } from './pages/6-lecture/lecture-matrix-default.component';
 import { LectureComponent7 } from './pages/7-lecture/lecture.component';
 import { LectureComponent8 } from './pages/8-lecture/lecture.component';
+import { LectureComponent9 } from './pages/9-lecture/lecture.component';
 
 const routes: Routes = [
   { path: 'lecture-1/canvas', component: LectureComponent1 },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'lecture-6-matrix-default/canvas', component: LectureComponent6MatrixDefault },
   { path: 'lecture-7-matrix-motion/canvas', component: LectureComponent7 },
   { path: 'lecture-8-multiobject/canvas', component: LectureComponent8 },
+  { path: 'lecture-9-multiobject/canvas', component: LectureComponent9 },
 ];
 
 @NgModule({

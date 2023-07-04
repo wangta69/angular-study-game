@@ -15,6 +15,7 @@ import { LectureComponent6 } from './pages/6-lecture/lecture.component';
 import { LectureComponent6MatrixDefault } from './pages/6-lecture/lecture-matrix-default.component';
 import { LectureComponent7 } from './pages/7-lecture/lecture.component';
 import { LectureComponent8 } from './pages/8-lecture/lecture.component';
+import { LectureComponent9 } from './pages/9-lecture/lecture.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { LectureComponent8 } from './pages/8-lecture/lecture.component';
     LectureComponent6MatrixDefault,
     LectureComponent7,
     LectureComponent8,
+    LectureComponent9,
   ],
   imports: [
     BrowserModule,
