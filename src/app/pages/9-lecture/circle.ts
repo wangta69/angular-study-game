@@ -47,21 +47,21 @@ export class Circle extends Objects {
 
   // mousedown   isIntersect
   // https://medium.com/@lavrton/hit-region-detection-for-html5-canvas-and-how-to-listen-to-click-events-on-canvas-shapes-815034d7e9f8
-  isIntersect(xc: number, yc: number) {
+  // isIntersect(xc: number, yc: number) {
     
-    //  타원일 경우 이 부분과 radius를 활용하여 touch 되었는지 확인
-    const m = this.matrix;
+  //   //  타원일 경우 이 부분과 radius를 활용하여 touch 되었는지 확인
+  //   const m = this.matrix;
     
-    const distance = Math.sqrt(
-      (xc - (m[4])) * (xc - (m[4])) +
-        (yc - (m[5])) * (yc - (m[5])) 
-    );
-    if (distance < this.r) {
-      this.xc = xc;
-      this.yc = yc;
-      return true;
-    }
+  //   const distance = Math.sqrt(
+  //     (xc - (m[4])) * (xc - (m[4])) +
+  //       (yc - (m[5])) * (yc - (m[5])) 
+  //   );
+  //   if (distance < this.r) {
+  //     this.xc = xc;
+  //     this.yc = yc;
+  //     return true;
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 }

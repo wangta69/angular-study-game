@@ -27,17 +27,17 @@ export class Triangle extends Polygon {
   }
 
 
-  isIntersect(xc: number, yc: number) {
-    // 사각형일 경우
-    const m = this.matrix;
-    if (this.points) {
-      // if (yc > this.min.y + m[5] && yc < this.max.y + m[5] && xc > this.min.x + m[4] && xc < this.max.x+ m[4]) {
-      if (yc > m[5] - this.g.y  && yc < this.g.y + m[5] && xc > m[4] && xc < this.g.x+ m[4]) {
-        this.xc = xc;
-        this.yc = yc;
-        return true;
-      }
-    }
-    return false;
-  }
+  // isIntersect(xc: number, yc: number) {
+  //   // 사각형일 경우
+  //   const m = this.matrix;
+  //   if (this.points) {
+  //     // if (yc > this.min.y + m[5] && yc < this.max.y + m[5] && xc > this.min.x + m[4] && xc < this.max.x+ m[4]) {
+  //     if (yc > m[5] - this.g.y  && yc < this.g.y + m[5] && xc > m[4] && xc < this.g.x+ m[4]) {
+  //       this.xc = xc;
+  //       this.yc = yc;
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 }

@@ -1,3 +1,5 @@
+import rgbConvert from './convertColor';
+
 export class Objects {
   protected matrix = [1,0,0,1,0,0];
   protected xc: number | null = null; //  마우스 클릭 위치(x)
@@ -68,10 +70,9 @@ export class Objects {
     this.xc = null;
     this.yc = null;
   }
-
+  
   // mousemove
   drag(ctx: CanvasRenderingContext2D, x: number, y: number) {
-    
     if (this.xc && this.yc) {
       // 좌표상 움직인 거리 구하기
       const dx = x - this.xc;
@@ -86,11 +87,27 @@ export class Objects {
     }
   }
 
+  isIntersect(ctx: any, xc: number, yc: number) {
+
+    const pixel = ctx.getImageData(xc, yc, 1, 1).data;
+    const color = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`;
+
+    const splitHex = rgbConvert(this.property.fillStyle);
+    const fillStyle = `rgb(${splitHex.r},${splitHex.g},${splitHex.b})`;
+
+    if (color == fillStyle) {
+      this.xc = xc;
+      this.yc = yc;
+      return true;
+    }
+
+    return false;
+
+  }
+
   // object rotate
   //
   rotate(ctx: CanvasRenderingContext2D, angle: number) {
-
-    
     this.rDegree = this.rDegree + angle;
     console.log('rotate', this.rDegree );
     this.setRotation();
