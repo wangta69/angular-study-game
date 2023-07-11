@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-
+import * as GSAP from 'gsap';
 import { Rectangle } from './rectangle';
 import { Triangle } from './triangle';
 import { Circle } from './circle';
@@ -14,7 +14,7 @@ import { Ellipse } from './ellipse';
     (dblclick)='onMouseDblclick($event)'
     width='700px' height= '700px'></canvas>`
 })
-export class LectureComponent9 implements OnInit{
+export class LectureComponent11 implements OnInit{
   @ViewChild('canvasId', {static: true}) canvasRef: ElementRef<HTMLCanvasElement> = {} as ElementRef;
 
   private canvas: any;
@@ -22,6 +22,13 @@ export class LectureComponent9 implements OnInit{
 
   private selected: any = null;
   private objects: any[] = [];
+
+
+  private position = {
+    x: 0,
+    y: 0,
+    rotate: 0,
+  };
 
   constructor(
   ) { 
@@ -70,6 +77,28 @@ export class LectureComponent9 implements OnInit{
     ellipse.draw(this.ctx);
     this.objects.push(ellipse);
 
+
+    GSAP.gsap.to(this.position, {
+      duration: 2,
+      ease: "bounce.out",
+      x: 400, 
+      y: 400, 
+      rotate: 3,
+      onUpdate: () => {
+        this.clearRect();
+        ellipse.setOrigin(this.position.x, this.position.y);
+        triangle1.rotate(this.ctx, this.position.rotate);
+        console.log(this.position);
+        this.objects.forEach((obj: any) => {
+          obj.draw(this.ctx);
+        })
+
+      },
+      onComplete: () => {
+        
+      }
+    });
+
     // console.log(rgbConver.);
     // rgbConver.color('#ccccc');
   }
@@ -87,12 +116,16 @@ export class LectureComponent9 implements OnInit{
 
       this.objects.forEach((obj: any) => {
         if(obj.isIntersect(this.ctx, pos.x, pos.y)) {
+
+          
           selectIndex = i;
           this.selected = obj;
+
         }
         i++;
       })
       if (selectIndex !== null) {
+        console.log('selectIndex:', selectIndex);
         this.objects.splice(selectIndex, 1);
         this.objects.push(this.selected) // 항목을 제거하는 방법);
       }
@@ -141,6 +174,11 @@ export class LectureComponent9 implements OnInit{
    * @param evt 
    */
   onMouseDblclick = (evt: MouseEvent) => {
+    // console.log('======== onMouseDblclick');
+    // this.preventSimpleClick = true;
+    // clearTimeout(this.clickTimer);
+
+    // const pos = this.getMousePos(this.canvas, evt);
     this.clearRect();
     this.objects.forEach((obj: any) => {
       if(this.selected.name === obj.name) {

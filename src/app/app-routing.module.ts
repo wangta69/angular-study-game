@@ -14,6 +14,7 @@ import { LectureComponent7 } from './pages/7-lecture/lecture.component';
 import { LectureComponent8 } from './pages/8-lecture/lecture.component';
 import { LectureComponent9 } from './pages/9-lecture/lecture.component';
 import { LectureComponent10 } from './pages/10-lecture/lecture.component';
+import { LectureComponent11 } from './pages/11-lecture/lecture.component';
 
 const routes: Routes = [
   { path: 'lecture-1/canvas', component: LectureComponent1 },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'lecture-8-multiobject/canvas', component: LectureComponent8 },
   { path: 'lecture-9-multiobject/canvas', component: LectureComponent9 },
   { path: 'lecture-10/canvas', component: LectureComponent10 },
+  { path: 'lecture-11/canvas', component: LectureComponent11 },
 ];
 
 @NgModule({
